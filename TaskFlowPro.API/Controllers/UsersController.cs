@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskFlowPro.API.Models;
+using TaskFlowPro.API.Services;
 
 namespace TaskFlowPro.API.Controllers;
 
@@ -7,20 +8,22 @@ namespace TaskFlowPro.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
+   
+    private readonly UserService _userService = new();
+
     [HttpGet]
     public ActionResult<List<User>> GetUsers()
     {
-        var users = new List<User>
-        {
-            new User
-            {
-                Id = 1,
-                FirstName = "John",
-                LastName = "Doe",
-                Email = "john.doe@example.com"
-            }
-        };
+        var users = _userService.GetUsers();
 
         return Ok(users);
+    }
+
+    [HttpGet("{id}")]
+    public ActionResult<User> GetUserById(int id)
+    {
+        var user = _userService.GetUserById(id);
+
+        return Ok(user);
     }
 }
