@@ -1,26 +1,21 @@
 ﻿using TaskFlowPro.API.Models;
 using TaskFlowPro.API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace TaskFlowPro.API.Services;
 
 public class UserService
 {
-    private readonly ApplicationDbContext _dbContext = new();
+    private readonly ApplicationDbContext _dbContext;
+
+    public UserService(ApplicationDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     public List<User> GetUsers()
     {
-        if (!_dbContext.Users.Any())
-        {
-            _dbContext.Users.Add(
-                new User
-                {
-                    Id = 1,
-                    FirstName = "John",
-                    LastName = "Doe",
-                    Email = "john.doe@example.com"
-                });
-        }
-
-        return _dbContext.Users;
+        return _dbContext.Users.ToList();
     }
 
     public User GetUserById(int id)

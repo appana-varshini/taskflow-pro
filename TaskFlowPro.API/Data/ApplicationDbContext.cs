@@ -1,10 +1,14 @@
-﻿using TaskFlowPro.API.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskFlowPro.API.Models;
 
-namespace TaskFlowPro.API.Data
+namespace TaskFlowPro.API.Data;
+
+public class ApplicationDbContext : DbContext
 {
-    public class ApplicationDbContext
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
     {
-        public List<User> Users { get; set; } = new();
-
     }
+
+    public DbSet<User> Users { get; set; }
 }
