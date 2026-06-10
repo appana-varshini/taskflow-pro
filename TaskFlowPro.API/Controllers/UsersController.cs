@@ -30,4 +30,12 @@ public class UsersController : ControllerBase
 
         return Ok(user);
     }
+
+    [HttpPost]
+    public ActionResult<User> CreateUser(User user)
+    {
+        var createdUser = _userService.CreateUser(user);
+
+        return Ok(createdUser);
+    }
 }

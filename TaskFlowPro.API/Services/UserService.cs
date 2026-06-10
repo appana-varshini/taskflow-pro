@@ -28,4 +28,12 @@ public class UserService
             Email = "john.doe@example.com"
         };
     }
+
+    public User CreateUser(User user)
+    {
+        _dbContext.Users.Add(user);
+        _dbContext.SaveChanges();
+
+        return user;
+    }
 }
