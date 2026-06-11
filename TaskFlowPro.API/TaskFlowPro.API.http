@@ -10,3 +10,16 @@ Content-Type: application/json
 }
 
 ###
+PUT https://localhost:7069/api/users/2
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Johnson",
+  "email": "jane.johnson@example.com"
+}
+
+###
+DELETE https://localhost:7069/api/users/2
+
+###

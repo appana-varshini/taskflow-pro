@@ -18,15 +18,9 @@ public class UserService
         return _dbContext.Users.ToList();
     }
 
-    public User GetUserById(int id)
+    public User? GetUserById(int id)
     {
-        return new User
-        {
-            Id = id,
-            FirstName = "John",
-            LastName = "Doe",
-            Email = "john.doe@example.com"
-        };
+        return _dbContext.Users.FirstOrDefault(u => u.Id == id);
     }
 
     public User CreateUser(User user)
@@ -35,5 +29,36 @@ public class UserService
         _dbContext.SaveChanges();
 
         return user;
+    }
+    public User? UpdateUser(int id, User updatedUser)
+    {
+        var existingUser = _dbContext.Users.FirstOrDefault(u => u.Id == id);
+
+        if (existingUser == null)
+        {
+            return null;
+        }
+
+        existingUser.FirstName = updatedUser.FirstName;
+        existingUser.LastName = updatedUser.LastName;
+        existingUser.Email = updatedUser.Email;
+
+        _dbContext.SaveChanges();
+
+        return existingUser;
+    }
+    public bool DeleteUser(int id)
+    {
+        var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        _dbContext.Users.Remove(user);
+        _dbContext.SaveChanges();
+
+        return true;
     }
 }

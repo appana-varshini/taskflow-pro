@@ -28,6 +28,11 @@ public class UsersController : ControllerBase
     {
         var user = _userService.GetUserById(id);
 
+        if (user == null)
+        {
+            return NotFound();
+        }
+
         return Ok(user);
     }
 
@@ -37,5 +42,31 @@ public class UsersController : ControllerBase
         var createdUser = _userService.CreateUser(user);
 
         return Ok(createdUser);
+    }
+
+    [HttpPut("{id}")]
+    public ActionResult<User> UpdateUser(int id, User user)
+    {
+        var updatedUser = _userService.UpdateUser(id, user);
+
+        if (updatedUser == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(updatedUser);
+    }
+
+    [HttpDelete("{id}")]
+    public ActionResult DeleteUser(int id)
+    {
+        var deleted = _userService.DeleteUser(id);
+
+        if (!deleted)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }
