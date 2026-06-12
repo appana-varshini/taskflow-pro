@@ -13,26 +13,28 @@ public class UserService
         _dbContext = dbContext;
     }
 
-    public List<User> GetUsers()
+    public async Task<List<User>> GetUsers()
     {
-        return _dbContext.Users.ToList();
+        return await _dbContext.Users.ToListAsync();
     }
 
-    public User? GetUserById(int id)
+    public async Task<User?> GetUserById(int id)
     {
-        return _dbContext.Users.FirstOrDefault(u => u.Id == id);
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == id);
     }
 
-    public User CreateUser(User user)
+    public async Task<User> CreateUser(User user)
     {
         _dbContext.Users.Add(user);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
         return user;
     }
-    public User? UpdateUser(int id, User updatedUser)
+    public async Task<User?> UpdateUser(int id, User updatedUser)
     {
-        var existingUser = _dbContext.Users.FirstOrDefault(u => u.Id == id);
+        var existingUser = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (existingUser == null)
         {
@@ -43,13 +45,14 @@ public class UserService
         existingUser.LastName = updatedUser.LastName;
         existingUser.Email = updatedUser.Email;
 
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
         return existingUser;
     }
-    public bool DeleteUser(int id)
+    public async Task<bool> DeleteUser(int id)
     {
-        var user = _dbContext.Users.FirstOrDefault(u => u.Id == id);
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null)
         {
@@ -57,7 +60,7 @@ public class UserService
         }
 
         _dbContext.Users.Remove(user);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
         return true;
     }

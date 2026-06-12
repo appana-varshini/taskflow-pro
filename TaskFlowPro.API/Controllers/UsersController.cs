@@ -17,17 +17,17 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<User>> GetUsers()
+    public async Task<ActionResult<List<User>>> GetUsers()
     {
-        var users = _userService.GetUsers();
+        var users = await _userService.GetUsers();
 
         return Ok(users);
     }
 
     [HttpGet("{id}")]
-    public ActionResult<User> GetUserById(int id)
+    public async Task<ActionResult<User>> GetUserById(int id)
     {
-        var user = _userService.GetUserById(id);
+        var user = await _userService.GetUserById(id);
 
         if (user == null)
         {
@@ -38,7 +38,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<User> CreateUser(CreateUserDto createUserDto)
+    public async Task<ActionResult<User>> CreateUser(CreateUserDto createUserDto)
     {
         var user = new User
         {
@@ -47,13 +47,13 @@ public class UsersController : ControllerBase
             Email = createUserDto.Email
         };
 
-        var createdUser = _userService.CreateUser(user);
+        var createdUser = await _userService.CreateUser(user);
 
         return Ok(createdUser);
     }
 
     [HttpPut("{id}")]
-    public ActionResult<User> UpdateUser(int id, UpdateUserDto updateUserDto)
+    public async Task<ActionResult<User>> UpdateUser(int id, UpdateUserDto updateUserDto)
     {
         var user = new User
         {
@@ -62,7 +62,7 @@ public class UsersController : ControllerBase
             Email = updateUserDto.Email
         };
 
-        var updatedUser = _userService.UpdateUser(id, user);
+        var updatedUser = await _userService.UpdateUser(id, user);
 
         if (updatedUser == null)
         {
@@ -73,9 +73,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public ActionResult DeleteUser(int id)
+    public async Task<ActionResult> DeleteUser(int id)
     {
-        var deleted = _userService.DeleteUser(id);
+        var deleted = await _userService.DeleteUser(id);
 
         if (!deleted)
         {

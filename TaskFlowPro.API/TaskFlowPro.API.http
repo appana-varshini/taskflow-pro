@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE https://localhost:7069/api/users/2
+DELETE https://localhost:7069/api/users/3
 
 ###
 POST https://localhost:7069/api/users
@@ -41,5 +41,30 @@ Content-Type: application/json
   "lastName": "",
   "email": "invalid-email"
 }
+
+###
+
+POST https://localhost:7069/api/users
+Content-Type: application/json
+
+{
+  "firstName": "Alice",
+  "lastName": "Brown",
+  "email": "alice.brown@example.com"
+}
+
+###
+
+PUT https://localhost:7069/api/users/4
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Updated",
+  "email": "john.updated@example.com"
+}
+
+###
+DELETE https://localhost:7069/api/users/1
 
 ###
