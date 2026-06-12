@@ -23,3 +23,23 @@ Content-Type: application/json
 DELETE https://localhost:7069/api/users/2
 
 ###
+POST https://localhost:7069/api/users
+Content-Type: application/json
+
+{
+  "firstName": "",
+  "lastName": "",
+  "email": "abc"
+}
+
+###
+PUT https://localhost:7069/api/users/1
+Content-Type: application/json
+
+{
+  "firstName": "",
+  "lastName": "",
+  "email": "invalid-email"
+}
+
+###
