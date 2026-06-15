@@ -49,7 +49,9 @@ public class UsersController : ControllerBase
 
         var createdUser = await _userService.CreateUser(user);
 
-        return Ok(createdUser);
+        return CreatedAtAction(nameof(GetUserById),
+                                new { id = createdUser.Id },
+                                createdUser);
     }
 
     [HttpPut("{id}")]
