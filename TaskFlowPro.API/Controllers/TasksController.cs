@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TaskFlowPro.API.DTOs;
 using TaskFlowPro.API.Models;
 using TaskFlowPro.API.Services;
 //using TaskFlowPro.Models;
@@ -25,15 +26,23 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<TaskItem>> CreateTask(TaskItem task)
+    public async Task<ActionResult<TaskItem>> CreateTask(CreateTaskDto createTaskDto)
     {
+        var task = new TaskItem
+        {
+            Title = createTaskDto.Title,
+            Description = createTaskDto.Description,
+            IsCompleted = createTaskDto.IsCompleted
+        };
+
         var createdTask = await _taskService.CreateTask(task);
 
         return CreatedAtAction(
-            nameof(GetTasks),
+            nameof(GetTaskById),
             new { id = createdTask.Id },
             createdTask);
     }
+
     [HttpGet("{id}")]
     public async Task<ActionResult<TaskItem>> GetTaskById(int id)
     {
@@ -48,8 +57,15 @@ public class TasksController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<TaskItem>> UpdateTask(int id, TaskItem task)
+    public async Task<ActionResult<TaskItem>> UpdateTask(int id, UpdateTaskDto updateTaskDto)
     {
+        var task = new TaskItem
+        {
+            Title = updateTaskDto.Title,
+            Description = updateTaskDto.Description,
+            IsCompleted = updateTaskDto.IsCompleted
+        };
+
         var updatedTask = await _taskService.UpdateTask(id, task);
 
         if (updatedTask == null)
