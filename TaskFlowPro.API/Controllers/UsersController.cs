@@ -44,7 +44,8 @@ public class UsersController : ControllerBase
         {
             FirstName = createUserDto.FirstName,
             LastName = createUserDto.LastName,
-            Email = createUserDto.Email
+            Email = createUserDto.Email,
+            Password = createUserDto.Password
         };
 
         var createdUser = await _userService.CreateUser(user);
