@@ -28,7 +28,15 @@ public class TaskService
     public async Task<TaskItem?> GetTaskById(int id)
     {
         return await _dbContext.Tasks
-            .FirstOrDefaultAsync(t => t.Id == id);
+        .Include(t => t.User)
+        .FirstOrDefaultAsync(t => t.Id == id);
+    }
+    public async Task<List<TaskItem>> GetTasksByUser(int userId)
+    {
+        return await _dbContext.Tasks
+            .Include(t => t.User)
+            .Where(t => t.UserId == userId)
+            .ToListAsync();
     }
     public async Task<TaskItem?> UpdateTask(int id, TaskItem updatedTask)
     {

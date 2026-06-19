@@ -57,6 +57,14 @@ public class TasksController : ControllerBase
         return Ok(task);
     }
 
+    [HttpGet("user/{userId}")]
+    public async Task<IActionResult> GetTasksByUser(int userId)
+    {
+        var tasks = await _taskService.GetTasksByUser(userId);
+
+        return Ok(tasks);
+    }
+
     [HttpPut("{id}")]
     public async Task<ActionResult<TaskItem>> UpdateTask(int id, UpdateTaskDto updateTaskDto)
     {
