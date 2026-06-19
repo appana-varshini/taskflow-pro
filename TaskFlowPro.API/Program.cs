@@ -1,9 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using TaskFlowPro.API.Data;
 using TaskFlowPro.API.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<TaskService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

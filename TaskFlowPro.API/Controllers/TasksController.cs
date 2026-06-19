@@ -32,7 +32,8 @@ public class TasksController : ControllerBase
         {
             Title = createTaskDto.Title,
             Description = createTaskDto.Description,
-            IsCompleted = createTaskDto.IsCompleted
+            IsCompleted = createTaskDto.IsCompleted,
+            UserId = createTaskDto.UserId
         };
 
         var createdTask = await _taskService.CreateTask(task);
@@ -63,7 +64,8 @@ public class TasksController : ControllerBase
         {
             Title = updateTaskDto.Title,
             Description = updateTaskDto.Description,
-            IsCompleted = updateTaskDto.IsCompleted
+            IsCompleted = updateTaskDto.IsCompleted,
+            UserId = updateTaskDto.UserId
         };
 
         var updatedTask = await _taskService.UpdateTask(id, task);

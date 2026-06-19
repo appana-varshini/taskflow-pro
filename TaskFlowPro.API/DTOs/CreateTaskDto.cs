@@ -12,4 +12,7 @@ public class CreateTaskDto
     public string Description { get; set; } = string.Empty;
 
     public bool IsCompleted { get; set; }
+    
+    [Required]
+    public int UserId { get; set; }
 }

@@ -15,7 +15,7 @@ public class TaskService
 
     public async Task<List<TaskItem>> GetTasks()
     {
-        return await _dbContext.Tasks.ToListAsync();
+        return await _dbContext.Tasks.Include(t => t.User).ToListAsync();
     }
     public async Task<TaskItem> CreateTask(TaskItem task)
     {
