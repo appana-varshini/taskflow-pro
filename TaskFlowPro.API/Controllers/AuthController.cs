@@ -25,7 +25,12 @@ namespace TaskFlowPro.API.Controllers
                 return Unauthorized("Invalid email or password.");
             }
 
-            return Ok("Login successful.");
+            var token = _authService.GenerateToken(user);
+
+            return Ok(new
+            {
+                Token = token
+            });
         }
     }
 }

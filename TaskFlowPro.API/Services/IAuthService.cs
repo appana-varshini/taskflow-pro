@@ -6,5 +6,6 @@ namespace TaskFlowPro.API.Services
     public interface IAuthService
     {
         Task<User?> Login(LoginDto loginDto);
+        string GenerateToken(User user);
     }
 }
