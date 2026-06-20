@@ -41,7 +41,9 @@ public class TaskService
     public async Task<TaskItem?> UpdateTask(int id, TaskItem updatedTask)
     {
         var existingTask = await _dbContext.Tasks
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstOrDefaultAsync(t =>
+            t.Id == id &&
+            t.UserId == updatedTask.UserId);
 
         if (existingTask == null)
         {
@@ -56,10 +58,12 @@ public class TaskService
 
         return existingTask;
     }
-    public async Task<bool> DeleteTask(int id)
+    public async Task<bool> DeleteTask(int id, int userId)
     {
         var task = await _dbContext.Tasks
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstOrDefaultAsync(t =>
+                t.Id == id &&
+                t.UserId == userId);
 
         if (task == null)
         {

@@ -13,6 +13,4 @@ public class UpdateTaskDto
 
     public bool IsCompleted { get; set; }
 
-    [Required]
-    public int UserId { get; set; }
 }

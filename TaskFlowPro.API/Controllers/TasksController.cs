@@ -2,12 +2,15 @@
 using TaskFlowPro.API.DTOs;
 using TaskFlowPro.API.Models;
 using TaskFlowPro.API.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 //using TaskFlowPro.Models;
 
 namespace TaskFlowPro.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TasksController : ControllerBase
 {
     private readonly TaskService _taskService;
@@ -15,6 +18,12 @@ public class TasksController : ControllerBase
     public TasksController(TaskService taskService)
     {
         _taskService = taskService;
+    }
+    private int GetLoggedInUserId()
+    {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        return int.Parse(userId!);
     }
 
     [HttpGet]
@@ -28,12 +37,14 @@ public class TasksController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TaskItem>> CreateTask(CreateTaskDto createTaskDto)
     {
+        var userId = GetLoggedInUserId();
+
         var task = new TaskItem
         {
             Title = createTaskDto.Title,
             Description = createTaskDto.Description,
             IsCompleted = createTaskDto.IsCompleted,
-            UserId = createTaskDto.UserId
+            UserId = userId
         };
 
         var createdTask = await _taskService.CreateTask(task);
@@ -57,9 +68,11 @@ public class TasksController : ControllerBase
         return Ok(task);
     }
 
-    [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetTasksByUser(int userId)
+    [HttpGet("mytasks")]
+    public async Task<IActionResult> GetMyTasks()
     {
+        var userId = GetLoggedInUserId();
+
         var tasks = await _taskService.GetTasksByUser(userId);
 
         return Ok(tasks);
@@ -68,12 +81,14 @@ public class TasksController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<TaskItem>> UpdateTask(int id, UpdateTaskDto updateTaskDto)
     {
+        var userId = GetLoggedInUserId();
+
         var task = new TaskItem
         {
             Title = updateTaskDto.Title,
             Description = updateTaskDto.Description,
             IsCompleted = updateTaskDto.IsCompleted,
-            UserId = updateTaskDto.UserId
+            UserId = userId
         };
 
         var updatedTask = await _taskService.UpdateTask(id, task);
@@ -89,7 +104,9 @@ public class TasksController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTask(int id)
     {
-        var deleted = await _taskService.DeleteTask(id);
+        var userId = GetLoggedInUserId();
+
+        var deleted = await _taskService.DeleteTask(id, userId);
 
         if (!deleted)
         {
