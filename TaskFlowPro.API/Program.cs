@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using TaskFlowPro.API.Data;
 using TaskFlowPro.API.Services;
-
+using TaskFlowPro.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddControllers();
@@ -62,6 +62,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -71,6 +72,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

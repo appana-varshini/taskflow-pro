@@ -2,6 +2,7 @@
 using TaskFlowPro.API.Models;
 using TaskFlowPro.API.Services;
 using TaskFlowPro.API.DTOs;
+using TaskFlowPro.API.Helpers;
 
 namespace TaskFlowPro.API.Controllers;
 
@@ -17,15 +18,19 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<User>>> GetUsers()
+    public async Task<IActionResult> GetUsers()
     {
         var users = await _userService.GetUsers();
 
-        return Ok(users);
+        return Ok(new ApiResponse<object>(
+       true,
+       "Users retrieved successfully.",
+       users
+        ));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<User>> GetUserById(int id)
+    public async Task<IActionResult> GetUserById(int id)
     {
         var user = await _userService.GetUserById(id);
 
@@ -34,11 +39,15 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        return Ok(user);
+        return Ok(new ApiResponse<object>(
+        true,
+        "User retrieved successfully.",
+         user
+        ));
     }
 
     [HttpPost]
-    public async Task<ActionResult<User>> CreateUser(CreateUserDto createUserDto)
+    public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
     {
         var user = new User
         {
@@ -50,13 +59,19 @@ public class UsersController : ControllerBase
 
         var createdUser = await _userService.CreateUser(user);
 
-        return CreatedAtAction(nameof(GetUserById),
-                                new { id = createdUser.Id },
-                                createdUser);
+        return CreatedAtAction(
+         nameof(GetUserById),
+         new { id = createdUser.Id },
+         new ApiResponse<User>(
+         true,
+        "User created successfully.",
+        createdUser
+         )
+         );
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<User>> UpdateUser(int id, UpdateUserDto updateUserDto)
+    public async Task<IActionResult> UpdateUser(int id, UpdateUserDto updateUserDto)
     {
         var user = new User
         {
@@ -69,14 +84,22 @@ public class UsersController : ControllerBase
 
         if (updatedUser == null)
         {
-            return NotFound();
+            return NotFound(new ApiResponse<object>(
+            false,
+            "User not found.",
+            null
+            ));
         }
 
-        return Ok(updatedUser);
+        return Ok(new ApiResponse<User>(
+        true,
+        "User updated successfully.",
+        updatedUser
+        ));
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteUser(int id)
+    public async Task<IActionResult> DeleteUser(int id)
     {
         var deleted = await _userService.DeleteUser(id);
 
@@ -85,6 +108,10 @@ public class UsersController : ControllerBase
             return NotFound();
         }
 
-        return NoContent();
+        return Ok(new ApiResponse<object>(
+          true,
+        "User deleted successfully.",
+        null
+        ));
     }
 }

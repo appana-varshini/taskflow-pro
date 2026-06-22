@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskFlowPro.API.DTOs;
 using TaskFlowPro.API.Services;
+using TaskFlowPro.API.Helpers;
 
 namespace TaskFlowPro.API.Controllers
 {
@@ -22,15 +23,23 @@ namespace TaskFlowPro.API.Controllers
 
             if (user == null)
             {
-                return Unauthorized("Invalid email or password.");
+                return Unauthorized(new ApiResponse<object>(
+                    false,
+                    "Invalid email or password.",
+                    null
+                ));
             }
 
             var token = _authService.GenerateToken(user);
 
-            return Ok(new
-            {
-                Token = token
-            });
+            return Ok(new ApiResponse<object>(
+                true,
+                "Login successful.",
+                new
+                {
+                    Token = token
+                }
+            ));
         }
     }
 }

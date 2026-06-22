@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TaskFlowPro.API.DTOs;
+using TaskFlowPro.API.Helpers;
 using TaskFlowPro.API.Models;
 using TaskFlowPro.API.Services;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 //using TaskFlowPro.Models;
 
 namespace TaskFlowPro.API.Controllers;
@@ -31,7 +32,11 @@ public class TasksController : ControllerBase
     {
         var tasks = await _taskService.GetTasks();
 
-        return Ok(tasks);
+        return Ok(new ApiResponse<IEnumerable<TaskItem>>(
+        true,
+        "Tasks retrieved successfully.",
+        tasks
+        ));
     }
 
     [HttpPost]
@@ -50,9 +55,14 @@ public class TasksController : ControllerBase
         var createdTask = await _taskService.CreateTask(task);
 
         return CreatedAtAction(
-            nameof(GetTaskById),
-            new { id = createdTask.Id },
-            createdTask);
+        nameof(GetTaskById),
+        new { id = createdTask.Id },
+        new ApiResponse<TaskItem>(
+        true,
+        "Task created successfully.",
+        createdTask
+    )
+    );  
     }
 
     [HttpGet("{id}")]
@@ -62,10 +72,18 @@ public class TasksController : ControllerBase
 
         if (task == null)
         {
-            return NotFound();
+            return NotFound(new ApiResponse<object>(
+             false,
+            "Task not found.",
+            null
+            ));
         }
 
-        return Ok(task);
+        return Ok(new ApiResponse<TaskItem>(
+        true,
+        "Task retrieved successfully.",
+        task
+        ));
     }
 
     [HttpGet("mytasks")]
@@ -75,7 +93,11 @@ public class TasksController : ControllerBase
 
         var tasks = await _taskService.GetTasksByUser(userId);
 
-        return Ok(tasks);
+        return Ok(new ApiResponse<List<TaskItem>>(
+        true,
+        "Tasks retrieved successfully.",
+        tasks
+        ));
     }
 
     [HttpPut("{id}")]
@@ -95,10 +117,18 @@ public class TasksController : ControllerBase
 
         if (updatedTask == null)
         {
-            return NotFound();
+            return NotFound(new ApiResponse<object>(
+            false,
+            "Task not found.",
+            null
+            ));
         }
 
-        return Ok(updatedTask);
+        return Ok(new ApiResponse<TaskItem>(
+        true,
+        "Task updated successfully.",
+        updatedTask
+        ));
     }
 
     [HttpDelete("{id}")]
@@ -110,9 +140,17 @@ public class TasksController : ControllerBase
 
         if (!deleted)
         {
-            return NotFound();
+            return NotFound(new ApiResponse<object>(
+            false,
+            "Task not found.",
+            null
+            ));
         }
 
-        return NoContent();
+        return Ok(new ApiResponse<object>(
+        true,
+        "Task deleted successfully.",
+        null
+        ));
     }
 }
