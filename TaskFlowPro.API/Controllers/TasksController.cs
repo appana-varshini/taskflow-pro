@@ -93,10 +93,10 @@ public class TasksController : ControllerBase
 
         var tasks = await _taskService.GetTasksByUser(userId);
 
-        return Ok(new ApiResponse<List<TaskItem>>(
-        true,
-        "Tasks retrieved successfully.",
-        tasks
+        return Ok(new ApiResponse<List<TaskDto>>(
+            true,
+            "Tasks retrieved successfully.",
+            tasks
         ));
     }
 

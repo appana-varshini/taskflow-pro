@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskFlowPro.API.Data;
+using TaskFlowPro.API.DTOs;
 using TaskFlowPro.API.Models;
 
 namespace TaskFlowPro.API.Services;
@@ -31,11 +32,18 @@ public class TaskService
         .Include(t => t.User)
         .FirstOrDefaultAsync(t => t.Id == id);
     }
-    public async Task<List<TaskItem>> GetTasksByUser(int userId)
+    public async Task<List<TaskDto>> GetTasksByUser(int userId)
     {
         return await _dbContext.Tasks
-            .Include(t => t.User)
             .Where(t => t.UserId == userId)
+            .Select(t => new TaskDto
+            {
+                Id = t.Id,
+                Title = t.Title,
+                Description = t.Description,
+                IsCompleted = t.IsCompleted,
+                UserId = t.UserId
+            })
             .ToListAsync();
     }
     public async Task<TaskItem?> UpdateTask(int id, TaskItem updatedTask)
